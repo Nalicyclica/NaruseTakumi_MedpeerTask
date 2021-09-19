@@ -8,24 +8,25 @@ class CategoryIdea
   end
 
   def save
-    return false if !valid?
-    category = category_exist_or_not()
-    category = Category.create(name: name) if !category
+    return false unless valid?
+
+    category = category_exist_or_not
+    category ||= Category.create(name: name)
     idea_create(category.id)
   end
-  
+
   private
 
   def category_exist_or_not
-    return Category.find_by(name: name)
+    Category.find_by(name: name)
   end
-  
+
   def idea_create(category_id)
     if Idea.create(body: body, category_id: category_id)
-      return true
+      true
     else
-      errors.add(:base, "不正なカテゴリーです")
-      return false
+      errors.add(:base, '不正なカテゴリーです')
+      false
     end
   end
 end

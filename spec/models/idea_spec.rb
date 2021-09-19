@@ -15,7 +15,7 @@ RSpec.describe Idea, type: :model do
       it 'categoryがないと登録できない' do
         @idea.category_id = nil
         @idea.valid?
-        expect(@idea.errors.full_messages).to include("Category must exist")
+        expect(@idea.errors.full_messages).to include('Category must exist')
       end
     end
   end

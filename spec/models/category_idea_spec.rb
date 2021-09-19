@@ -16,12 +16,12 @@ RSpec.describe CategoryIdea, type: :model do
     end
     context '新しいアイデアを登録できない時' do
       it 'nameがないと登録できない' do
-        @category_idea.name = ""
+        @category_idea.name = ''
         @category_idea.valid?
         expect(@category_idea.errors.full_messages).to include("Name can't be blank")
       end
       it 'bodyがないと登録できない' do
-        @category_idea.body = ""
+        @category_idea.body = ''
         @category_idea.valid?
         expect(@category_idea.errors.full_messages).to include("Body can't be blank")
       end
