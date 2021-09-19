@@ -4,7 +4,7 @@ class IdeasController < ApplicationController
     if categoryIdea.save
       render status: 201, json: categoryIdea
     else
-      render status: 422, json: categoryIdea.errors
+      render status: 422, json: categoryIdea.errors.full_messages
     end
   end
 
