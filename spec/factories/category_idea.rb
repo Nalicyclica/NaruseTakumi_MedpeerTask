@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :idea do
+  factory :category_idea do
+    name {Faker::Lorem.word}
     body {Faker::Lorem.sentence}
-    association :category
   end
 end
