@@ -31,13 +31,13 @@ class IdeasController < ApplicationController
       # category = Category.where(name: params[:category_name]).limit(1)
       if category.present?
       # if category != []
-        ideas = Idea.where(category_id: category.id).eager_load(:category).select('ideas.*','UNIX_TIMESTAMP(ideas.created_at) as created_utime','categories.name')
+        ideas = Idea.where(category_id: category.id).eager_load(:category).select('categories.name')
         # ideas = Idea.joins("INNER JOIN (#{category.to_sql}) category ON ideas.category_id = category.id").select('ideas.*','UNIX_TIMESTAMP(ideas.created_at) as created_utime','category.name')
       else
         return false
       end
     else
-      ideas = Idea.eager_load(:category).select('categories.name','UNIX_TIMESTAMP(ideas.created_at) as created_utime')
+      ideas = Idea.eager_load(:category).select('categories.name')
     end
     response_data = []
     ideas.each do |idea|
@@ -45,7 +45,7 @@ class IdeasController < ApplicationController
         id: idea["id"],
         category: idea["name"],
         body: idea["body"],
-        created_at: idea["created_utime"]
+        created_at: idea["created_at"].to_i
       }
       response_data << item
     end
