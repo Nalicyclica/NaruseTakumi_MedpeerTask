@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :ideas, only: :create
+  resources :ideas, only: [:index, :create]
 end
