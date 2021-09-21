@@ -10,23 +10,26 @@ class CategoryIdea
   def save
     return false unless valid?
 
-    category = category_exist_or_not
-    category ||= Category.create(name: name)
-    idea_create(category.id)
-  end
+    ActiveRecord::Base.transaction do
+      category = Category.find_or_initialize_by(name: name)
+      category.save!
+      idea = Idea.new(body: body, category_id: category.id)
+      idea.save!
+    end
+      return true
 
+    rescue => e
+      add_errors(e)
+      return false
+  end
+    
   private
-
-  def category_exist_or_not
-    Category.find_by(name: name)
-  end
-
-  def idea_create(category_id)
-    if Idea.create(body: body, category_id: category_id)
-      true
-    else
-      errors.add(:base, '不正なカテゴリーです')
-      false
+    
+  def add_errors(e)
+    e.record.errors.messages.each do |key, values|
+      values.each do |value|
+        errors.add(key, value)
+      end
     end
   end
 end
