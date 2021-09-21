@@ -1,8 +1,8 @@
 class IdeasController < ApplicationController
   def index
-    response_data = select_ideas
-    if response_data
-      render json: {data: response_data}
+    ideas = select_ideas
+    if ideas
+      render json: {data: ideas_to_response_data(ideas)}
     else
       render status: 404, json: ["Category doesn't exist"]
     end
@@ -26,19 +26,16 @@ class IdeasController < ApplicationController
   end
 
   def select_ideas
-    if params[:category_name].present?
-      category = Category.find_by(name: params[:category_name])
-      # category = Category.where(name: params[:category_name]).limit(1)
-      if category.present?
-      # if category != []
-        ideas = Idea.where(category_id: category.id).eager_load(:category).select('categories.name')
-        # ideas = Idea.joins("INNER JOIN (#{category.to_sql}) category ON ideas.category_id = category.id").select('ideas.*','UNIX_TIMESTAMP(ideas.created_at) as created_utime','category.name')
-      else
-        return false
-      end
+    return ideas = Idea.eager_load(:category).select('categories.name') if params[:category_name].blank?
+    category = Category.find_by(name: params[:category_name])
+    if category.present?
+      return ideas = Idea.where(category_id: category.id).eager_load(:category).select('categories.name')
     else
-      ideas = Idea.eager_load(:category).select('categories.name')
+      return false
     end
+  end
+  
+  def ideas_to_response_data(ideas)
     response_data = []
     ideas.each do |idea|
       item = {
