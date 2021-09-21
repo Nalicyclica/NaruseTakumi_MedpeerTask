@@ -16,15 +16,14 @@ class CategoryIdea
       idea = Idea.new(body: body, category_id: category.id)
       idea.save!
     end
-      return true
-
-    rescue => e
-      add_errors(e)
-      return false
+    true
+  rescue StandardError => e
+    add_errors(e)
+    false
   end
-    
+
   private
-    
+
   def add_errors(e)
     e.record.errors.messages.each do |key, values|
       values.each do |value|

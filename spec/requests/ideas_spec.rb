@@ -21,21 +21,21 @@ RSpec.describe 'Ideas', type: :request do
     context '正常なレスポンス' do
       it 'category_nameを指定しないと、全てのideaを取得できる' do
         get ideas_path, params: {}
-        data = JSON.parse(response.body)["data"]
+        data = JSON.parse(response.body)['data']
         expect(response.status).to eq 200
         expect(data.length).to eq 2
         expect(data).to include(@first_idea_response_data)
       end
       it 'category_nameが空欄だと、全てのideaを取得できる' do
-        get ideas_path, params: {category_name: ""}
-        data = JSON.parse(response.body)["data"]
+        get ideas_path, params: { category_name: '' }
+        data = JSON.parse(response.body)['data']
         expect(response.status).to eq 200
         expect(data.length).to eq 2
         expect(data).to include(@first_idea_response_data)
       end
       it 'category_nameを指定すると、そのカテゴリーのideaを取得できる' do
-        get ideas_path, params: {category_name: @first_idea.category.name}
-        data = JSON.parse(response.body)["data"]
+        get ideas_path, params: { category_name: @first_idea.category.name }
+        data = JSON.parse(response.body)['data']
         expect(response.status).to eq 200
         expect(data.length).to eq 1
         expect(data).to include(@first_idea_response_data)
@@ -44,7 +44,7 @@ RSpec.describe 'Ideas', type: :request do
     end
     context 'エラーレスポンス' do
       it 'category_nameが存在しないと、404エラーが返ってくる' do
-        get ideas_path, params: {category_name: "wrong_category"}
+        get ideas_path, params: { category_name: 'wrong_category' }
         expect(response.status).to eq 404
       end
     end
